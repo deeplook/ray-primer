@@ -1,0 +1,44 @@
+[project]
+name = "ray-primer"
+version = "0.1.0"
+description = "Small, self-contained Ray scripts for learning distributed Python"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Dinu Gherman", email = "gherman@darwin.in-berlin.de" },
+]
+keywords = ["ray", "distributed-computing", "parallel", "tutorial", "learning"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: System :: Distributed Computing",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pip>=26.1.2",
+    "protobuf<7",
+    "ray[data,serve,train,tune]>=2.55.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.urls]
+Repository = "https://github.com/deeplook/ray-primer"
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
