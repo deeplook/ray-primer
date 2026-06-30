@@ -104,6 +104,14 @@ read in order.
 | `examples/30_serve.py` | Deploying callable services with Ray Serve |
 | `examples/31_train.py` | Data-parallel workers and dataset sharding with Ray Train |
 | `examples/32_tune.py` | Hyperparameter search with Ray Tune |
+| `examples/33_llm_cloud.py` | Calling a cloud-hosted model with Ray Data LLM |
+
+Run the cloud LLM example after exporting an OpenAI API key:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+uv run examples/33_llm_cloud.py
+```
 
 ## Running all tests
 
@@ -126,6 +134,12 @@ uv run python -m pytest -v
   environment, so its first run may take longer while that environment is cached.
 - `examples/31_train.py` enables Ray Train V2, whose base trainer API is still
   marked as a developer API by Ray.
+- `examples/33_llm_cloud.py` sends one request to OpenAI using `gpt-4o-mini`
+  with an eight-token output limit. Set `OPENAI_API_KEY` to run it; without a
+  key, the example exits without making a request. Ray 2.55.1 eagerly imports
+  its cloud-storage and local-engine support when `ray.data.llm` is loaded, so
+  `boto3`, PyTorch, and Transformers are installed even though this example
+  only calls a hosted HTTP endpoint.
 - `examples/18_reading_csv.py` uses the included `data/tips.csv` sample.
 - `examples/21_aggregations_and_parquet.py` writes generated files under
   `out/tips_by_day/`, which is ignored by Git.
@@ -134,4 +148,5 @@ uv run python -m pytest -v
 
 - [Ray Core walkthrough](https://docs.ray.io/en/latest/ray-core/walkthrough.html)
 - [Ray Data quickstart](https://docs.ray.io/en/latest/data/quickstart.html)
+- [Ray Data LLM guide](https://docs.ray.io/en/latest/data/working-with-llms.html)
 - [Ray cluster configuration](https://docs.ray.io/en/latest/cluster/getting-started.html)

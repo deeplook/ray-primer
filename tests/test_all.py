@@ -1,5 +1,6 @@
 """Run every tutorial module in a fresh Python process."""
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -12,9 +13,13 @@ MODULES = sorted((ROOT_DIR / "examples").glob("[0-9][0-9]_*.py"))
 
 @pytest.mark.parametrize("module", MODULES, ids=lambda path: path.name)
 def test_module_runs(module: Path) -> None:
+    env = os.environ.copy()
+    if module.name == "33_llm_cloud.py":
+        env.pop("OPENAI_API_KEY", None)
     result = subprocess.run(
         [sys.executable, str(module)],
         capture_output=True,
+        env=env,
         text=True,
         timeout=180,
     )

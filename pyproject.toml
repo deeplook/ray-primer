@@ -20,9 +20,12 @@ classifiers = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "boto3",
     "pip>=26.1.2",
     "protobuf<7",
     "ray[data,serve,train,tune]>=2.55.1",
+    "torch",
+    "transformers",
 ]
 
 [build-system]
