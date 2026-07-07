@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/github/license/deeplook/ray-primer)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/downloads/release/python-3120/)
 [![Ray](https://img.shields.io/badge/Ray-2.55-028CF0?logo=ray&logoColor=white)](https://www.ray.io/)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/deeplook)
 
 A collection of small, self-contained Ray scripts for learning distributed
 Python on a local machine. The examples use the same APIs that scale to a
