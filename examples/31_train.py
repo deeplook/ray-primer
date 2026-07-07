@@ -21,9 +21,9 @@ def train_loop() -> None:
     shard = train.get_dataset_shard("train")
     row_count = sum(len(batch["id"]) for batch in shard.iter_batches(batch_size=4))
     metrics = {
-            "world_rank": context.get_world_rank(),
-            "world_size": context.get_world_size(),
-            "rows_seen": row_count,
+        "world_rank": context.get_world_rank(),
+        "world_size": context.get_world_size(),
+        "rows_seen": row_count,
     }
     with TemporaryDirectory() as checkpoint_dir:
         Path(checkpoint_dir, "worker.txt").write_text(str(metrics))

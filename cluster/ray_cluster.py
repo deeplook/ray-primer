@@ -90,7 +90,9 @@ class ClusterConfig:
             "RAY_HEAD_PORT", setting("RAY_HEAD_PORT", values, "6379")
         )
         assert head_port is not None
-        ssh_port = optional_positive_int("RAY_SSH_PORT", setting("RAY_SSH_PORT", values))
+        ssh_port = optional_positive_int(
+            "RAY_SSH_PORT", setting("RAY_SSH_PORT", values)
+        )
         identity_value = setting("RAY_SSH_IDENTITY", values)
         ssh_identity = Path(identity_value).expanduser() if identity_value else None
         config = cls(
@@ -117,7 +119,9 @@ class ClusterConfig:
             )
         if not SSH_TARGET_RE.fullmatch(self.worker_ssh):
             raise ClusterError("RAY_WORKER_SSH must look like user@host")
-        if not REMOTE_DIR_RE.fullmatch(self.remote_dir) or self.remote_dir.startswith("~"):
+        if not REMOTE_DIR_RE.fullmatch(self.remote_dir) or self.remote_dir.startswith(
+            "~"
+        ):
             raise ClusterError(
                 "RAY_REMOTE_DIR must be an absolute or home-relative path without '~' or spaces"
             )
@@ -181,7 +185,11 @@ class ClusterManager:
         self.runner = runner
 
     def require_commands(self) -> None:
-        missing = [name for name in ("ssh", "rsync", "tailscale", "uv") if not shutil.which(name)]
+        missing = [
+            name
+            for name in ("ssh", "rsync", "tailscale", "uv")
+            if not shutil.which(name)
+        ]
         if missing:
             raise ClusterError(f"Missing local commands: {', '.join(missing)}")
 
@@ -189,25 +197,34 @@ class ClusterManager:
         if self.config.head_ip:
             return self.config.head_ip
         result = self.runner.run(["tailscale", "ip", "-4"], capture=True)
-        candidates = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+        candidates = [
+            line.strip() for line in result.stdout.splitlines() if line.strip()
+        ]
         if not candidates:
             raise ClusterError("Tailscale returned no IPv4 address on the main machine")
         return validate_ipv4(candidates[0], "local Tailscale IP")
 
-    def ssh(self, script: str, *, capture: bool = False, check: bool = True, mutate: bool = False):
+    def ssh(
+        self,
+        script: str,
+        *,
+        capture: bool = False,
+        check: bool = True,
+        mutate: bool = False,
+    ) -> subprocess.CompletedProcess[str]:
         command = [
             "ssh",
             *self.config.ssh_args,
             self.config.worker_ssh,
             f"sh -lc {shlex.quote(script)}",
         ]
-        return self.runner.run(
-            command, capture=capture, check=check, mutate=mutate
-        )
+        return self.runner.run(command, capture=capture, check=check, mutate=mutate)
 
     def remote_tailscale_ip(self) -> str:
         result = self.ssh("tailscale ip -4", capture=True)
-        candidates = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+        candidates = [
+            line.strip() for line in result.stdout.splitlines() if line.strip()
+        ]
         if not candidates:
             raise ClusterError("Tailscale returned no IPv4 address on the worker")
         return validate_ipv4(candidates[0], "worker Tailscale IP")
@@ -331,18 +348,24 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--config", type=Path, default=DEFAULT_CONFIG, help="cluster.env path"
     )
-    parser.add_argument("--dry-run", action="store_true", help="print mutations without running them")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="print mutations without running them"
+    )
     parser.add_argument("--verbose", action="store_true", help="print every command")
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("check", help="validate local and remote prerequisites")
     subparsers.add_parser("sync", help="copy the project to the worker with rsync")
     up = subparsers.add_parser("up", help="synchronize and start both Ray nodes")
-    up.add_argument("--restart", action="store_true", help="stop existing Ray processes first")
+    up.add_argument(
+        "--restart", action="store_true", help="stop existing Ray processes first"
+    )
     subparsers.add_parser("status", help="show Ray cluster status")
     subparsers.add_parser("down", help="stop Ray on the worker and main machine")
     run = subparsers.add_parser("run", help="run a repository script on the cluster")
     run.add_argument("script", help="path relative to the repository root")
-    run.add_argument("args", nargs=argparse.REMAINDER, help="arguments passed to the script")
+    run.add_argument(
+        "args", nargs=argparse.REMAINDER, help="arguments passed to the script"
+    )
     return parser
 
 

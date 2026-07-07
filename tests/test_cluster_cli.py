@@ -4,7 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from cluster.ray_cluster import ClusterConfig, ClusterError, build_parser, parse_env_file
+from cluster.ray_cluster import (
+    ClusterConfig,
+    ClusterError,
+    build_parser,
+    parse_env_file,
+)
 
 VARIABLES = [
     "RAY_WORKER_SSH",
@@ -49,7 +54,9 @@ def test_load_config_with_defaults(tmp_path: Path) -> None:
     assert config.head_port == 6379
 
 
-def test_environment_overrides_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_environment_overrides_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     path = tmp_path / "cluster.env"
     path.write_text("RAY_WORKER_SSH=user@old-worker\n")
     monkeypatch.setenv("RAY_WORKER_SSH", "user@new-worker")

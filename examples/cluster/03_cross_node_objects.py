@@ -37,7 +37,9 @@ def consume(item: dict[str, object]) -> dict[str, object]:
     }
 
 
-produced = produce.options(scheduling_strategy=pinned(source_id)).remote(4 * 1024 * 1024)
+produced = produce.options(scheduling_strategy=pinned(source_id)).remote(
+    4 * 1024 * 1024
+)
 result = ray.get(
     consume.options(scheduling_strategy=pinned(destination_id)).remote(produced)
 )

@@ -18,4 +18,6 @@ def sum_of_squares(values: list[int]) -> int:
 
 
 print("sum of squares:", ray.get(sum_of_squares.remote(list(range(10)))))
-print("Resource requirements matter: blocking parent tasks can otherwise starve children.")
+print(
+    "Resource requirements matter: blocking parent tasks can otherwise starve children."
+)

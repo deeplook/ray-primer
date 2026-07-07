@@ -29,7 +29,7 @@ def init_ray(**overrides: object) -> object:
                 "Configure those resources with 'ray start' on each node."
             )
         common_options.update(overrides)
-        return ray.init(address=address, **common_options)
+        return ray.init(address=address, **common_options)  # type: ignore[arg-type]
 
     local_options: dict[str, object] = {
         **common_options,
@@ -37,4 +37,4 @@ def init_ray(**overrides: object) -> object:
         "include_dashboard": False,
         **overrides,
     }
-    return ray.init(**local_options)
+    return ray.init(**local_options)  # type: ignore[arg-type]
