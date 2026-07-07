@@ -12,5 +12,11 @@ wheels/
 # Runtime output from tutorial scripts
 out/
 
+# Working files
+work/
+
 # Machine-specific cluster configuration
 cluster/cluster.env
+
+# Local Claude Code settings
+.claude/
