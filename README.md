@@ -66,6 +66,43 @@ See the [Tailscale cluster runbook](cluster/README.md) for setup, security,
 shared-storage limitations, commands, and troubleshooting. No worker is needed
 to run the normal local examples or unit tests.
 
+## Docker
+
+A container bundles Python 3.12, uv, and every Ray dependency, so the local
+examples run without installing anything on the host. Build once:
+
+```bash
+docker build -t ray-primer .
+```
+
+Run an example by passing its script path:
+
+```bash
+docker run --rm ray-primer examples/02_remote_tasks.py
+```
+
+Ray keeps its object store in `/dev/shm`. All the examples here run fine on
+Docker's 64 MB default — Ray simply warns and falls back to a `/tmp`-backed
+store — but giving the container more shared memory silences the warning and is
+closer to how you would run heavier workloads:
+
+```bash
+docker run --rm --shm-size=1g ray-primer examples/02_remote_tasks.py
+```
+
+The image installs PyTorch and Transformers (pulled in eagerly by Ray Data
+LLM), so the first build is several gigabytes and takes a while. Pass secrets
+such as the OpenAI key through the environment:
+
+```bash
+docker run --rm --shm-size=1g -e OPENAI_API_KEY ray-primer examples/33_llm_cloud.py
+```
+
+The multi-node cluster in `cluster/` is not containerized — it drives real
+machines over Tailscale and SSH. For a containerized multi-node cluster, use
+[KubeRay](https://docs.ray.io/en/latest/cluster/kubernetes/index.html) or the
+Ray cluster launcher rather than this image.
+
 ## Modules
 
 Run a script with `uv run examples/<file>`. The modules are intended to be

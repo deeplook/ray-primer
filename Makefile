@@ -2,8 +2,9 @@
 
 EXAMPLE ?= examples/01_ray_init.py
 CLUSTER_EXAMPLE ?= examples/cluster/01_nodes.py
+IMAGE ?= ray-primer
 
-.PHONY: help install format lint test test-v test-cluster run cluster-check cluster-up cluster-status cluster-run cluster-down check-all clean
+.PHONY: help install format lint test test-v test-cluster run cluster-check cluster-up cluster-status cluster-run cluster-down docker-build docker-run docker-test check-all clean
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-14s %s\n", $$1, $$2}'
@@ -44,6 +45,15 @@ cluster-run:  ## Run one example on the optional Ray cluster (override with CLUS
 
 cluster-down:  ## Stop the optional Ray cluster
 	uv run cluster/ray_cluster.py down
+
+docker-build:  ## Build the Docker image
+	docker build -t $(IMAGE) .
+
+docker-run:  ## Run one local example in Docker (override with EXAMPLE=...)
+	docker run --rm --shm-size=1g $(IMAGE) $(EXAMPLE)
+
+docker-test:  ## Run the local test suite in Docker
+	docker run --rm --shm-size=1g $(IMAGE) python -m pytest tests/test_all.py
 
 check-all: install format lint test clean  ## Run format, lint, local tests, and clean
 	@echo "All checks passed!"
