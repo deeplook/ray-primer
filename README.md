@@ -1,6 +1,7 @@
 # Ray Primer
 
 [![CI](https://github.com/deeplook/ray-primer/actions/workflows/ci.yml/badge.svg)](https://github.com/deeplook/ray-primer/actions/workflows/ci.yml)
+[![Downloads](https://img.shields.io/github/downloads/deeplook/ray-primer/total?label=Downloads&logo=github)](https://github.com/deeplook/ray-primer/releases)
 [![License](https://img.shields.io/github/license/deeplook/ray-primer)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-blue)](https://www.python.org/downloads/release/python-3120/)
 [![Ray](https://img.shields.io/badge/Ray-2.55-028CF0?logo=ray&logoColor=white)](https://www.ray.io/)
